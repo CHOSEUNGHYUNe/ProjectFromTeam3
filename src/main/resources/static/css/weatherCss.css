@@ -1,0 +1,40 @@
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 95vh;
+    width: 95vw;
+	background-image: url('https://img.freepik.com/free-photo/white-cloud-on-blue-sky-and-sea_74190-4488.jpg?size=626&ext=jpg');
+	background-repeat : no-repeat;
+    background-size : cover;
+	background-color: skyblue;
+	font-size: 20px;
+}
+
+table {
+	width: 575px; height:600px;
+	margin: auto;
+	border-collapse: collapse;
+	background-color: skyblue;
+	opacity:0.7;
+}
+
+td {
+	text-align: center;
+	border: 2px solid pink;
+	padding: 5px;
+}
+
+th {
+	background-color: #8080ff;
+	border: 2px solid pink;
+	position: sticky;
+  	top: 0;
+	text-align: center;
+	padding: 5px;
+}
+
+.scrolltable {
+	display: block;
+    overflow: auto;
+}
