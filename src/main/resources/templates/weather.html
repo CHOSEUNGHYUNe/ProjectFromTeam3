@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	crossorigin="anonymous"></script>
+</head>
+<body>
+	<h3 class="time">현재시간 : </h3>
+	<h3 class="nowtemp">현재온도 : </h3>
+	<h3 class="lowtemp">최저온도 : </h3>
+	<h3 class="highttemp">최고온도 : </h3>
+	<h3 class="icon"></h3>
+
+	
+	<span><a href="/weatherForecast">weatherForecast로 이동</a></span>
+	
+	<script>
+		$.getJSON('https://api.openweathermap.org/data/2.5/weather?q=Busan&appid=a8de4fd1ab71d6342364fd6cc7e9ec07&units=metric', function(result) {
+			$('.nowtemp').append(result.main.temp);
+			$('.lowtemp').append(result.main.temp_min);
+			$('.highttemp').append(result.main.temp_max);
+			
+			var iconURL = '<img src="http://openweathermap.org/img/wn/' + result.weather[0].icon + '.png" alt="' + result.weather[0].description + '">'
+			$('.icon').html(iconURL);
+			
+			var ct = result.dt;
+			function changeTime(t) {
+				var ot = new Date(t * 1000);
+				var h = ot.getHours();
+				var m = ot.getMinutes();
+				var s = ot.getSeconds();
+				
+				return h+':'+m+':'+s;
+			}
+			
+			var nowTime = changeTime(ct);
+			$('.time').append(nowTime);
+		})
+	</script>
+</body>
+</html>
