@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/weatherCss.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	crossorigin="anonymous"></script>
+
+</head>
+<body>
+	
+	<table class='scrolltable'>
+		<thead>
+			<tr>
+				<th>날씨</th>
+				<th>시간</th>
+				<th>온도</th>
+				<th>강우확률</th>
+				<th>바람</th>
+				<th>습도</th>
+				<th>강수량</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- <tr>
+				<td>현재 시간</td>
+				<td>현재 온도</td>
+			</tr> -->
+		</tbody>
+	</table>
+	
+	<script>
+		$.getJSON('https://api.openweathermap.org/data/2.5/forecast?q=Busan&appid=a8de4fd1ab71d6342364fd6cc7e9ec07&units=metric', function(result) {
+			
+			for(var i = 0; i < 40; i++) {
+				var ntime = result.list[i].dt;
+				var ntemp = result.list[i].main.temp;
+				var iconURL = '<img src="http://openweathermap.org/img/wn/' + result.list[i].weather[0].icon + '.png" alt="' + result.list[i].weather[0].description + '">';
+				var rainpop = Math.ceil(result.list[i].pop * 1000) / 10;
+				var nwind = result.list[i].wind.speed;
+				var nhum = result.list[i].main.humidity;
+				
+				// 비 올 경우와 안 올 경우 강수량  
+				var checkrain = result.list[i].weather[0].main;
+				if (checkrain == "Rain") {
+					var nrain = result.list[i].rain;
+					var rain = nrain["3h"];
+				} else {
+					var rain = 0;
+				}
+					
+					// 날짜 간단히 설정 (00일-00시)
+					function changeTime(t) {
+						var ot = new Date(t * 1000);
+						var d = ot.getDate();
+						var h = ot.getHours();
+						
+						return d+'일-'+h+'시';
+					}
+					var nowTime = changeTime(ntime);
+					
+				var tableHtml = '<tr>' +
+									'<td>' + iconURL + '</td>' +									
+									'<td>' + nowTime + '</td>' +									
+									'<td>' + ntemp + '</td>' +
+									'<td>' + rainpop + '%' + '</td>' +
+									'<td>' + nwind + 'm/s' + '</td>' +
+									'<td>' + nhum + '%' + '</td>' +
+									'<td>' + rain + 'mm' + '</td>' +
+								'</tr>';
+				
+				$('tbody').append(tableHtml);
+				
+			}
+			
+		})
+		
+	</script>
+</body>
+</html>
