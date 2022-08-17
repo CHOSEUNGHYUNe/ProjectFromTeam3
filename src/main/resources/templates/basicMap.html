@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>다음 지도 API</title>
+</head>
+<body>
+	<a th:href="@{https://map.kakao.com/link/to/부산역, 35.115578158042226, 129.04027382504742}"
+		class="departure" role="button" th:target="_blank"
+		style="font-size: 3em; text-align: center; left: 50%; margin-left: 450px; top: 270px">
+		가는 길 찾기(부산역 출발)</a>
+	<div id="map" style="width:1500px;height:500px;"></div> 
+	
+	
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9dd5d4c4383bf9f784c9b8cdbaa1685c&libraries=services,clusterer"></script>
+	<script>
+		var mapContainer = document.getElementById('map'), // 지도 표시할 div 
+		    mapOption = {
+		        center: new kakao.maps.LatLng(35.115578158042226, 129.04027382504742), // 지도 중심 좌표
+		        level: 3, // 지도 확대 레벨
+		        mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도 종류
+		    }; 
+		
+		// 지도 생성
+		var map = new kakao.maps.Map(mapContainer, mapOption); 
+		
+		//장소 데이터 입력
+		var data = [
+			[35.115578158042226, 129.04027382504742, '<div style="padding:5px">부산역</div>'],
+			[35.17316430418893, 128.94668838237055, '<div style="padding:5px">김해공항</div>'],
+			[35.19604186298831, 129.21319902130287, '<div style="padding:5px">롯데월드어드벤처 부산</div>'],
+			[35.19472385324995, 129.21884088121183, '<div style="padding:5px">스카이라인루지 부산</div>']
+		]
+		
+		// 입력 데이터 전부 출력하기 위한 for 반복문 생성
+		for (var i=0; i<data.length; i++) {
+		
+		
+		// 지도에 마커 이미지를 생성하고 표시
+		var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커이미지의 주소  
+    	imageSize = new kakao.maps.Size(64, 69), // 마커이미지 크기
+    	imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지 옵션. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정
+      
+		// 마커의 이미지정보를 가지고 있는 마커이미지를 생성
+		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+    		markerPosition = new kakao.maps.LatLng(data[i][0], data[i][1]); // 마커가 표시될 위치
+
+		var marker = new kakao.maps.Marker({
+		    position: new kakao.maps.LatLng(data[i][0], data[i][1]), // 마커의 좌표(입력 data 반복)
+    		image: markerImage, markerPosition, // 마커 이미지 설정 
+		    map: map // 마커를 표시할 지도 객체
+		});
+		
+		// 인포윈도우를 생성
+		var infowindow = new kakao.maps.InfoWindow({
+	    	content : data[i][2] // 반복된 data 생성
+		});
+	  
+		// 마커 위에 인포윈도우를 표시. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시
+		infowindow.open(map, marker); 
+		
+		}
+	
+	</script>
+</body>
+</html>
